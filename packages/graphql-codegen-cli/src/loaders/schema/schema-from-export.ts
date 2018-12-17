@@ -5,9 +5,14 @@ import { buildASTSchema, buildClientSchema, DocumentNode, GraphQLSchema, Introsp
 import { debugLog, Types } from 'graphql-codegen-core';
 import { SchemaLoader } from './schema-loader';
 import { DetailedError } from '../../errors';
+import { SchemaFromCodeFileOptions } from './schema-from-code-ast';
 
-export class SchemaFromExport implements SchemaLoader {
-  canHandle(pointerToSchema: string): boolean {
+export class SchemaFromExport implements SchemaLoader<SchemaFromCodeFileOptions> {
+  canHandle(pointerToSchema: string, options: SchemaFromCodeFileOptions): boolean {
+    if (options.asAst) {
+      return false;
+    }
+
     const fullPath = isAbsolute(pointerToSchema) ? pointerToSchema : resolvePath(process.cwd(), pointerToSchema);
 
     return isValidPath(pointerToSchema) && existsSync(fullPath) && extname(pointerToSchema) !== '.json';

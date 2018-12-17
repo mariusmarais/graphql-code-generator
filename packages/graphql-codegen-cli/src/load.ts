@@ -8,6 +8,7 @@ import { SchemaFromTypedefs } from './loaders/schema/schema-from-typedefs';
 import { SchemaFromExport } from './loaders/schema/schema-from-export';
 import { DocumentFromString } from './loaders/documents/document-from-string';
 import { DocumentsFromGlob } from './loaders/documents/documents-from-glob';
+import { SchemaFromCodeAst } from './loaders/schema/schema-from-code-ast';
 
 function getCustomLoaderByPath(path: string): any {
   const requiredModule = require(path);
@@ -30,7 +31,8 @@ const schemaHandlers = [
   new IntrospectionFromFileLoader(),
   new SchemaFromString(),
   new SchemaFromTypedefs(),
-  new SchemaFromExport()
+  new SchemaFromExport(),
+  new SchemaFromCodeAst()
 ];
 
 export const loadSchema = async (
@@ -86,7 +88,7 @@ export const loadSchema = async (
       options = schemaDef[pointToSchema];
     }
 
-    if (await handler.canHandle(pointToSchema)) {
+    if (await handler.canHandle(pointToSchema, options)) {
       return handler.handle(pointToSchema, config, options);
     }
   }
