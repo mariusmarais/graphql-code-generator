@@ -29,10 +29,10 @@ const documentsHandlers = [new DocumentFromString(), new DocumentsFromGlob()];
 const schemaHandlers = [
   new IntrospectionFromUrlLoader(),
   new IntrospectionFromFileLoader(),
+  new SchemaFromCodeAst(),
   new SchemaFromString(),
   new SchemaFromTypedefs(),
-  new SchemaFromExport(),
-  new SchemaFromCodeAst()
+  new SchemaFromExport()
 ];
 
 export const loadSchema = async (
